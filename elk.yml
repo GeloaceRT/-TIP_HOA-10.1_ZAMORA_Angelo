@@ -1,0 +1,11 @@
+---
+- hosts: Ubuntu
+  become: yes
+  roles:
+    - kibana
+    - logstash
+
+- hosts: CentOS
+  become: yes
+  roles:
+    - elasticsearch

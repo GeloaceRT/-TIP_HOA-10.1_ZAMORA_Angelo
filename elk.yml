@@ -1,11 +1,33 @@
 ---
-- hosts: Ubuntu
-  become: yes
-  roles:
-    - kibana
-    - logstash
+- hosts: all
+  become: true
+  pre_tasks:
 
-- hosts: CentOS
-  become: yes
+  - name: update repository index / install Updates (CentOS)
+    tags: always
+    dnf:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "CentOS"
+
+  - name: update repository index / install Updates (Ubuntu)
+    tags: always
+    apt:
+      update_cache: yes
+    changed_when: false
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: elasticsearch
+  become: true
   roles:
-    - elasticsearch
+   - elasticsearch
+
+- hosts: kibana
+  become: true
+  roles:
+   - kibana
+
+- hosts: logstash
+  become: true
+  roles:
+   - logstash
